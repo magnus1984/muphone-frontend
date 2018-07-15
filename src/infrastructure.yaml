@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Template for deploying the frontend component required by muphone-frontend
+
+Resources:
+    HostingBucket:
+        Type: 'AWS::S3::Bucket'
+        Properties:
+            WebsiteConfiguration:
+                IndexDocument: 'index.html'
+
+    HostingBucketResourcePolicy:
+        Type: 'AWS::S3::BucketPolicy'
+        Properties:
+            Bucket: !Ref HostingBucket
+            PolicyDocument:
+                Statement:
+                    - Action:
+                        - "s3:GetObject"
+                      Effect: "Allow"
+                      Resource:
+                          Fn::Join:
+                              - ""
+                              - 
+                                - "arn:aws:s3:::"
+                                - !Ref HostingBucket
+                                - "/*"
+                      Principal: "*"
+
+    CDNDistributionOriginAccessIdentity:
+        Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
+        Properties:
+            CloudFrontOriginAccessIdentityConfig:
+                Comment: "static website distribution"
+
+    CDNDistribution:
+        Type: 'AWS::CloudFront::Distribution'
+        Properties:
+            DistributionConfig:
+                DefaultRootObject: 'index.html'
+                Enabled: true
+                HttpVersion: 'http2'
+                DefaultCacheBehavior:
+                    AllowedMethods:
+                        - GET
+                        - HEAD
+                    Compress: true
+                    TargetOriginId: S3Origin
+                    ForwardedValues:
+                        QueryString: true
+                        Cookies:
+                            Forward: none
+                    ViewerProtocolPolicy: redirect-to-https
+                PriceClass: PriceClass_All
+                ViewerCertificate:
+                    CloudFrontDefaultCertificate: true
+                Origins:
+                    - DomainName: !GetAtt HostingBucket.DomainName
+                      Id: S3Origin
+                      S3OriginConfig:
+                          OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CDNDistributionOriginAccessIdentity}
+
+

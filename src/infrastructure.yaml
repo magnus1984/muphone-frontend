@@ -59,4 +59,9 @@ Resources:
                       S3OriginConfig:
                           OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CDNDistributionOriginAccessIdentity}
 
+Outputs:
+    HostingBucketName:
+        Description: name of the S3 bucket that will host the content, has created by cloudformation
+        Value: !Ref HostingBucket
+
 

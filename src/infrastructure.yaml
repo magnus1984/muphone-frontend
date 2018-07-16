@@ -30,7 +30,7 @@ Resources:
 Outputs:
     ApplicationUrl:
         Description: URL of the application
-        Value: !GetAtt HostingBucketName.WebsiteURL
+        Value: !GetAtt HostingBucket.WebsiteURL
     HostingBucketName:
         Description: Name of the bucket where you have to deploy your static build
         Value: !Ref HostingBucket

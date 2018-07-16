@@ -38,7 +38,7 @@ Resources:
             DistributionConfig:
                 DefaultRootObject: ''
                 Aliases:
-                    - !GetAtt HostingBucket.DomainName
+                    - !Sub ${HostingBucket}.s3-website.${AWS::Region}.amazonaws.com
                 Enabled: true
                 HttpVersion: 'http2'
                 DefaultCacheBehavior:

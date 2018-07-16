@@ -26,45 +26,11 @@ Resources:
                                 - "/*"
                       Principal: "*"
 
-    CDNDistributionOriginAccessIdentity:
-        Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
-        Properties:
-            CloudFrontOriginAccessIdentityConfig:
-                Comment: "static website distribution"
-
-    CDNDistribution:
-        Type: 'AWS::CloudFront::Distribution'
-        Properties:
-            DistributionConfig:
-                DefaultRootObject: ''
-                Aliases:
-                    - !Sub ${HostingBucket}.s3-website.${AWS::Region}.amazonaws.com
-                Enabled: true
-                HttpVersion: 'http2'
-                DefaultCacheBehavior:
-                    AllowedMethods:
-                        - GET
-                        - HEAD
-                    Compress: true
-                    TargetOriginId: S3Origin
-                    ForwardedValues:
-                        QueryString: true
-                        Cookies:
-                            Forward: none
-                    ViewerProtocolPolicy: redirect-to-https
-                PriceClass: PriceClass_All
-                ViewerCertificate:
-                    CloudFrontDefaultCertificate: true
-                Origins:
-                    - DomainName: !GetAtt HostingBucket.DomainName
-                      Id: S3Origin
-                      S3OriginConfig:
-                          OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CDNDistributionOriginAccessIdentity}
 
 Outputs:
     ApplicationUrl:
-        Description: URL of the CloudFront Distribution
-        Value: !Sub https://${CDNDistribution.DomainName}
+        Description: URL of the application
+        Value: !GetAtt HostingBucketName.WebsiteURL
     HostingBucketName:
         Description: Name of the bucket where you have to deploy your static build
         Value: !Ref HostingBucket

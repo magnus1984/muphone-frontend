@@ -36,7 +36,9 @@ Resources:
         Type: 'AWS::CloudFront::Distribution'
         Properties:
             DistributionConfig:
-                DefaultRootObject: 'index.html'
+                DefaultRootObject: ''
+                Aliases:
+                    - !GetAtt HostingBucket.DomainName
                 Enabled: true
                 HttpVersion: 'http2'
                 DefaultCacheBehavior:
@@ -62,6 +64,6 @@ Resources:
 Outputs:
     HostingBucketName:
         Description: name of the S3 bucket that will host the content, has created by cloudformation
-        Value: !Ref HostingBucket
+        Value: !GetAtt HostingBucket.WebsiteURL
 
 

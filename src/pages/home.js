@@ -58,7 +58,7 @@ class Home extends React.Component {
                             <Col>
                                 <div style={{textAlign:'center'}} >
                                 <h1> Phone Verification Form</h1>
-                                <p> please enter a valid phone number to verify </p>
+                                <p> please enter a valid phone number to verify (number format MUST be E164)</p>
                                 </div>
                             </Col>
                         </Row>

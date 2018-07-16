@@ -62,8 +62,11 @@ Resources:
                           OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CDNDistributionOriginAccessIdentity}
 
 Outputs:
+    ApplicationUrl:
+        Description: URL of the CloudFront Distribution
+        Value: !Sub https://${CDNDistribution.DomainName}
     HostingBucketName:
-        Description: name of the S3 bucket that will host the content, has created by cloudformation
-        Value: !GetAtt HostingBucket.WebsiteURL
+        Description: Name of the bucket where you have to deploy your static build
+        Value: !Ref HostingBucket
 
 
